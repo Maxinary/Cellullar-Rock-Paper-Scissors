@@ -1,8 +1,3 @@
-let canvas = document.getElementById("draw");
-let context = canvas.getContext("2d");
-
-let windowSize = document.body.clientHeight;
-
 // could be made more efficient by caching
 // but honestly the efficiency of this function is not important
 function newMatrix(dims) {
@@ -20,20 +15,9 @@ function newMatrix(dims) {
   return o;
 }
 
-function initGraphics() {
-  canvas.width = windowSize;
-  canvas.height = windowSize;
-  clearScreen();
-}
-
-function clearScreen() {
-  context.fillStyle = "#eee";
-  context.fillRect(0,0,windowSize,windowSize);
-}
-
-function fillGridPoint(color, x, y, gridElementSize) {
-  context.fillStyle = color;
-  context.fillRect(x*gridElementSize, y*gridElementSize, gridElementSize, gridElementSize);
+function fillGridPoint(ctx, color, x, y, gridElementSize) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x*gridElementSize, y*gridElementSize, gridElementSize, gridElementSize);
 }
 
 function hex(number) {
@@ -60,4 +44,18 @@ function get_green(c) {
 
 function get_blue(c) {
   return dehex(c.slice(5,7));
+}
+
+function mixColors(colors, probabilities) {
+  let red = 0;
+  let green = 0;
+  let blue = 0;
+
+  for (var i=0; i<colors.length; i++) {
+    red += get_red(colors[i]) * probabilities[i];
+    green += get_green(colors[i]) * probabilities[i];
+    blue += get_blue(colors[i]) * probabilities[i];
+  }
+
+  return color(red, green, blue);
 }
