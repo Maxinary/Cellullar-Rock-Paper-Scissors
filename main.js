@@ -1,9 +1,9 @@
 // INPUT FLAGS
-let SMOOTHING = true;
+let SMOOTHING = false;
 
 // INPUT CONSTANTS
 let matrixSize = 128;
-let matrixCount = 5;
+let matrixCount = 2;
 
 // DERIVED VARIABLES
 let matrixIndex = 0;
@@ -149,13 +149,11 @@ function loop() {
 
   let curTime = Date.now();
   let dt = curTime - prevLoopTime;
-  prevLoopTime = curTime;
 
-  if (dt > 1000/40) {
+  if (dt > 1000/24) {
     stepdrawing();
     draw(SMOOTHING && true);
-  } else {
-    draw(true);
+    prevLoopTime = curTime;
   }
 
 }
