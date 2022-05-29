@@ -1,19 +1,19 @@
-// CONSTANTS
+// INPUT FLAGS
+let SMOOTHING = true;
 
-// UTIL FUNCTIONS
+// INPUT CONSTANTS
+let matrixSize = 128;
+let matrixCount = 5;
 
-// int
-function fight(a, b) {
-   if (a == -1) return b;
+// DERIVED VARIABLES
+let matrixIndex = 0;
+let scale = windowSize / matrixSize;
 
-   if (b == -1) return a;
+if (SMOOTHING == false)
+  matrixCount = 2;
 
-  if (a == b) return a;
+let matrix = newMatrix([matrixCount, matrixSize, matrixSize]);
 
-  if (a == (b+1)%3) return b;
-
-  return a;
-}
 
 // integer list
 let competitors = [
@@ -35,9 +35,9 @@ function mixColors(colors, probabilities) {
   let blue = 0;
 
   for (var i=0; i<colors.length; i++) {
-    red = red(colors[i]) * probabilities[i];
-    green = green(colors[i]) * probabilities[i];
-    blue = blue(colors[i]) * probabilities[i];
+    red += get_red(colors[i]) * probabilities[i];
+    green += get_green(colors[i]) * probabilities[i];
+    blue += get_blue(colors[i]) * probabilities[i];
   }
 
   return color(red, green, blue);
@@ -56,22 +56,9 @@ function argmax(arr) {
 }
 
 
-// CONSTANTS
-let matrixSize = 128;
-let scale = windowSize / matrixSize;
-let padding = 16;
-let matrix = newMatrix([2, matrixSize, matrixSize]);
-let matrixIndex = 0;
-
-let rounding = true;
-
-function setup() {
-
-}
-
 function stepdrawing() {
 
-  let otherIndex = matrixIndex ^ 1;
+  let otherIndex = (matrixIndex + 1)%matrixCount;
   let counts = [0,0,0];
   for (let x=0; x<matrixSize; x++) {
     for (let y=0; y<matrixSize; y++) {
@@ -113,10 +100,21 @@ function stepdrawing() {
 
 let prevLoopTime = 0;
 
-function draw() {
+let matrixProbMap = new Array(matrixCount).fill(1/matrixCount);
+let matrixValueMap = new Array(matrixCount);
+function draw(intermediate) {
   for (var x=0; x<matrixSize; x++) {
     for (var y=0; y<matrixSize; y++) {
-      fillGridPoint(getColor(matrix[matrixIndex][x][y]), x, y, scale);
+      let localColor = "";
+      if (intermediate) {
+        for (let m=0; m<matrixCount; m++)
+          matrixValueMap[m] = getColor(matrix[m][x][y]);
+        localColor = mixColors(matrixValueMap, matrixProbMap);
+      } else {
+        localColor = getColor(matrix[matrixIndex][x][y]);
+      }
+
+      fillGridPoint(localColor, x, y, scale);
     }
   }
 }
@@ -129,6 +127,14 @@ function start() {
     for (var y=0; y<matrixSize; y++) {
       let v = Math.floor( 3 * Math.random() );
       matrix[0][x][y] = v;
+    }
+  }
+
+  for (var m=1; m<matrixCount; m++) {
+    for (var x=0; x<matrixSize; x++) {
+      for (var y=0; y<matrixSize; y++) {
+        matrix[m][x][y] = color(0,0,0);
+      }
     }
   }
 
@@ -147,9 +153,11 @@ function loop() {
 
   if (dt > 1000/40) {
     stepdrawing();
+    draw(SMOOTHING && true);
+  } else {
+    draw(true);
   }
 
-  draw();
 }
 
 start();
