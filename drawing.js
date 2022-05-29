@@ -1,7 +1,7 @@
 let canvas = document.getElementById("draw");
 let context = canvas.getContext("2d");
 
-let windowSize = 512;
+let windowSize = document.body.clientHeight;
 
 // could be made more efficient by caching
 // but honestly the efficiency of this function is not important
@@ -50,14 +50,14 @@ function color(r, g, b) {
   return `#${hex(r)}${hex(g)}${hex(b)}`
 }
 
-function red(c) {
+function get_red(c) {
   return dehex(c.slice(1,3));
 }
 
-function green(c) {
+function get_green(c) {
   return dehex(c.slice(3,5));
 }
 
-function blue(c) {
+function get_blue(c) {
   return dehex(c.slice(5,7));
 }
