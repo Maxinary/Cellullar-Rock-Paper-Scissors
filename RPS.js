@@ -49,10 +49,10 @@ class RPS {
 
 
     // persistent loop variables
-    self.prevLoopTime = 0;
+    this.prevLoopTime = 0;
 
-    self.matrixProbMap = new Array(this.matrixCount).fill(1 / this.matrixCount);
-    self.matrixValueMap = new Array(this.matrixCount);
+    this.matrixProbMap = new Array(this.matrixCount).fill(1 / this.matrixCount);
+    this.matrixValueMap = new Array(this.matrixCount);
 
     this.context = canvas.getContext("2d");
 
