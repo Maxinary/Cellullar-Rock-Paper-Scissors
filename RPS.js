@@ -60,7 +60,7 @@ class RPS {
     for (var m=0; m<this.matrixCount; m++) {
       for (var x=0; x<this.matrixSize; x++) {
         for (var y=0; y<this.matrixSize; y++) {
-          this.matrix[m][x][y] = color(0,0,0);
+          this.matrix[m][x][y] = -1;
         }
       }
     }
