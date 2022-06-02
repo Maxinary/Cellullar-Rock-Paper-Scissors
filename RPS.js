@@ -36,14 +36,16 @@ class RPS {
           color( 70,  95, 217)
         ];
 
+    this.ifdead = 'ifdead' in features ? features.ifdead : false;
+
     // DERIVED VARIABLES
     this.matrixIndex = 0;
     let windowSize = canvas.clientHeight;
 
     this.scale = windowSize / this.matrixSize;
 
-    if (this.SMOOTHING == false)
-      this.matrixCount = 2;
+    //if (this.SMOOTHING == false)
+    //  this.matrixCount = 2;
 
     this.matrix = newMatrix([this.matrixCount, this.matrixSize, this.matrixSize]);
 
@@ -138,6 +140,15 @@ class RPS {
           localColor = this.getColor(this.matrix[this.matrixIndex][x][y]);
         }
 
+        if (this.ifdead) {
+          localColor = this.getColor(this.matrix[this.matrixIndex][x][y]);
+          for (var m=0; m<this.matrixCount-1; m++) {
+            if (this.matrix[this.matrixIndex][x][y] !=
+                this.matrix[(this.matrixIndex+m+1)%this.matrixCount][x][y])
+                localColor = color(0,0,0);
+            }
+        }
+
         fillGridPoint(this.context, localColor, x, y, this.scale);
       }
     }
@@ -146,13 +157,27 @@ class RPS {
   // START
   start() {
     this.prevLoopTime = Date.now();
+    this.paused = false;
 
     this.loop();
   }
 
+  step() {
+//    this.prevLoopTime = Date.now();
+    this.paused = true;
+
+    this.loop();
+  }
+
+
+  pause() {
+    this.paused = true;
+  }
+
+
   // LOOP
   loop() {
-    requestAnimationFrame(()=>this.loop());
+    if (!this.paused) requestAnimationFrame(()=>this.loop());
 
     let curTime = Date.now();
     let dt = curTime - this.prevLoopTime;
