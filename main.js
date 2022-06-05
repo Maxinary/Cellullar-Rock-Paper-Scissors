@@ -6,15 +6,16 @@ canvas.height = document.body.clientHeight;
 let rps = null;
 
 let saves = {
-"triangleGrow":function() {
-  let matrixSize = 128;
+"triangleGrow":function(matrixSize) {
+  if (matrixSize === undefined)
+    matrixSize = 128;
   let triangleSize = 2;
 
   rps = new RPS(canvas, {
     matrixSize: matrixSize,
     smoothing:false,
     init_random:false,
-    fps:40
+    fps:24
   });
 
 
@@ -26,8 +27,9 @@ let saves = {
   running = true;
   rps.start();
 },
-"triangleFill": function() {
-    let matrixSize = 128;
+"triangleFill": function(matrixSize) {
+  if (matrixSize === undefined)
+    matrixSize = 128;
 
     rps = new RPS(canvas, {
       matrixSize: matrixSize,
@@ -55,8 +57,9 @@ let saves = {
     running = true;
     rps.start();
   },
-  "steadyState": function() {
-    let matrixSize = 128;
+  "steadyState": function(matrixSize) {
+    if (matrixSize === undefined)
+      matrixSize = 128;
 
     rps = new RPS(canvas, {
       matrixSize: matrixSize,
@@ -82,8 +85,9 @@ let saves = {
     running = true;
     rps.draw(false);
   },
-  "invasion": function() {
-    let matrixSize = 128;
+  "invasion": function(matrixSize) {
+    if (matrixSize === undefined)
+      matrixSize = 128;
 
     rps = new RPS(canvas, {
       matrixSize: matrixSize,
@@ -145,8 +149,9 @@ let saves = {
     running = true;
     rps.start();
   },
-  "inversecircle": function() {
-    let matrixSize = 128;
+  "inversecircle": function(matrixSize) {
+    if (matrixSize === undefined)
+      matrixSize = 128;
     let radius = 63;
 
     rps = new RPS(canvas, {
@@ -172,16 +177,17 @@ let saves = {
     running = true;
     rps.start();
   },
-  "randy":function() {
-    let matrixSize = 128;
+  "randy":function(matrixSize) {
+    if (matrixSize === undefined)
+      matrixSize = 128;
 
     rps = new RPS(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:true,
       fps:24,
-      matrixCount:6,
-      ifdead:true,
+      matrixCount:9,
+      ifdead:false,
       /*competitors: [
         color(180,180,180),
         color(180,180,180),
@@ -192,11 +198,18 @@ let saves = {
     rps.start();
   }
 };
+
+let recorder = null;
+let saveName = null;
+let matrixSize = 64;
+
 document.onclick = function() {
   if (!rps.paused)
     rps.pause();
   else
     rps.step();
+
+  recorder.render();
 }
 
 document.onkeypress = function() {
@@ -204,5 +217,19 @@ document.onkeypress = function() {
     rps.start()
 }
 
+function start() {
+  recorder = new GIF({
+    workers: 2,
+    quality: Math.floor(canvas.height / matrixSize)
+  });
 
-saves["randy"]()
+  recorder.on('finished', function(blob) {
+    window.open(URL.createObjectURL(blob));
+  });
+  saves[saveName](matrixSize)
+}
+
+
+canvas.width = canvas.height = matrixSize;
+saveName = "randy";
+start(saveName)

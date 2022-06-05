@@ -186,7 +186,8 @@ class RPS {
       this.stepdrawing();
       this.draw(this.SMOOTHING && true);
       this.prevLoopTime = curTime;
-    }
 
+      recorder.addFrame(canvas, {copy: true, delay:1000/this.max_FPS});
+    }
   }
 }
