@@ -38,6 +38,10 @@ class RPSCanvasWrapper {
 
   }
 
+  set(x, y, v) {
+    this.rps.set(x, y, v);
+  }
+
   start() {
     this.paused = false;
     this.loop();
@@ -97,7 +101,6 @@ class RPS {
     let windowSize = canvas.height;
 
     this.scale = windowSize / this.matrixSize;
-    console.log(this.scale);
 
     //if (this.SMOOTHING == false)
     //  this.matrixCount = 2;
@@ -135,6 +138,9 @@ class RPS {
     }
   }
 
+  set(x,y,v) {
+    this.matrix[this.matrixIndex][x][y] = v;
+  }
 
   getColor(p) {
     if (p > -1 && p < this.competitors.length)
@@ -236,6 +242,7 @@ class RPS {
     let dt = curTime - this.prevLoopTime;
 
     if (dt > 1000/this.max_FPS) {
+//      console.log(1000/dt)
       this.stepdrawing();
 //      recorder.addFrame(canvas, {copy: true, delay:1000/this.max_FPS});
       this.prevLoopTime = curTime;

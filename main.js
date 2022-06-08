@@ -11,7 +11,7 @@ let saves = {
     matrixSize = 128;
   let triangleSize = 2;
 
-  rps = new RPS(canvas, {
+  rps = new RPSCanvasWrapper(canvas, {
     matrixSize: matrixSize,
     smoothing:false,
     init_random:false,
@@ -19,9 +19,9 @@ let saves = {
   });
 
 
-  rps.matrix[0][Math.floor(matrixSize / 2)][Math.floor(matrixSize / 2 - triangleSize * Math.sqrt(3) / 4)] = 0;
-  rps.matrix[0][Math.floor(matrixSize / 2 - triangleSize / 2)][Math.floor(matrixSize / 2 + triangleSize * Math.sqrt(3) / 4)] = 1;
-  rps.matrix[0][Math.floor(matrixSize / 2 + triangleSize / 2)][Math.floor(matrixSize / 2 + triangleSize * Math.sqrt(3) / 4)] = 2;
+  rps.set(Math.floor(matrixSize / 2), Math.floor(matrixSize / 2 - triangleSize * Math.sqrt(3) / 4), 0);
+  rps.set(Math.floor(matrixSize / 2 - triangleSize / 2), Math.floor(matrixSize / 2 + triangleSize * Math.sqrt(3) / 4), 1);
+  rps.set(Math.floor(matrixSize / 2 + triangleSize / 2), Math.floor(matrixSize / 2 + triangleSize * Math.sqrt(3) / 4), 2);
 
 
   running = true;
@@ -31,7 +31,7 @@ let saves = {
   if (matrixSize === undefined)
     matrixSize = 128;
 
-    rps = new RPS(canvas, {
+    rps = new RPSCanvasWrapper(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:false,
@@ -50,7 +50,7 @@ let saves = {
         else
           v = 2
 
-        rps.matrix[0][x][y] = v;
+        rps.set(x, y, v);
       }
     }
 
@@ -61,7 +61,7 @@ let saves = {
     if (matrixSize === undefined)
       matrixSize = 128;
 
-    rps = new RPS(canvas, {
+    rps = new RPSCanvasWrapper(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:false,
@@ -73,14 +73,13 @@ let saves = {
       for (var y = 0 ; y < matrixSize; y++) {
         let v = 2;
 
-        rps.matrix[0][x][y] = v;
+        rps.set(x, y, v);
       }
     }
 
-    rps.matrix[0][matrixSize-1][0] = 0;
-    rps.matrix[0][matrixSize-2][0] = 0;
-    rps.matrix[0][matrixSize-1][1] = 0;
-
+    rps.set(-1, 0, 0);
+    rps.set(-2, 0, 0);
+    rps.set(-1, 1, 0);
 
     running = true;
     rps.draw(false);
@@ -89,7 +88,7 @@ let saves = {
     if (matrixSize === undefined)
       matrixSize = 128;
 
-    rps = new RPS(canvas, {
+    rps = new RPSCanvasWrapper(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:false,
@@ -101,50 +100,48 @@ let saves = {
       for (var y = 0 ; y < matrixSize; y++) {
         let v = 2;
 
-        rps.matrix[0][x][y] = v;
+        rps.set(x, y, v);
       }
     }
 
 //  top right
 
-    rps.matrix[0][matrixSize-1][0] = 0;
-    rps.matrix[0][matrixSize-2][0] = 0;
-    rps.matrix[0][matrixSize-3][0] = 0;
+    rps.set(-1, 0, 0);
+    rps.set(-2, 0, 0);
+    rps.set(-3, 0, 0);
 
-    rps.matrix[0][matrixSize-1][0] = 0;
-    rps.matrix[0][matrixSize-1][1] = 0;
-    rps.matrix[0][matrixSize-1][2] = 0;
+    rps.set(-1, 0, 0)
+    rps.set(-1, 1, 0);
+    rps.set(-1, 2, 0);
 
 
 //  bot lef
-    rps.matrix[0][0][matrixSize-1] = 0;
-    rps.matrix[0][0][matrixSize-2] = 0;
-    rps.matrix[0][0][matrixSize-3] = 0;
+    rps.set(0, -1, 0);
+    rps.set(0, -2, 0);
+    rps.set(0, -3, 0);
 
-    rps.matrix[0][0][matrixSize-1] = 0;
-    rps.matrix[0][1][matrixSize-1] = 0;
-    rps.matrix[0][2][matrixSize-1] = 0;
+    rps.set(0, -1, 0);
+    rps.set(1, -1, 0);
+    rps.set(2, -1, 0);
 
 
     //  top lef
-    rps.matrix[0][0][0] = 0;
-    rps.matrix[0][0][1] = 0;
-    rps.matrix[0][0][2] = 0;
+    rps.set(0, 0, 0);
+    rps.set(0, 1, 0);
+    rps.set(0, 2, 0);
 
-    rps.matrix[0][0][0] = 0;
-    rps.matrix[0][1][0] = 0;
-    rps.matrix[0][2][0] = 0;
-
+    rps.set(0, 0, 0);
+    rps.set(1, 0, 0);
+    rps.set(2, 0, 0);
 
     //  bot lef
-    rps.matrix[0][matrixSize-1][matrixSize-1] = 0;
-    rps.matrix[0][matrixSize-1][matrixSize-2] = 0;
-    rps.matrix[0][matrixSize-1][matrixSize-3] = 0;
+    rps.set(-1, -1, 0);
+    rps.set(-1, -2, 0);
+    rps.set(-1, -3, 0);
 
-    rps.matrix[0][matrixSize-1][matrixSize-1] = 0;
-    rps.matrix[0][matrixSize-2][matrixSize-1] = 0;
-    rps.matrix[0][matrixSize-3][matrixSize-1] = 0;
-
+    rps.set(-1, -1, 0);
+    rps.set(-2, -1, 0);
+    rps.set(-3, -1, 0);
 
     running = true;
     rps.start();
@@ -154,7 +151,7 @@ let saves = {
       matrixSize = 128;
     let radius = 63;
 
-    rps = new RPS(canvas, {
+    rps = new RPSCanvasWrapper(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:false,
@@ -170,7 +167,7 @@ let saves = {
         if ((x-mid)*(x-mid)+(y-mid)*(y-mid) < radius*radius)
           v = 1;
 
-        rps.matrix[0][x][y] = v;
+        rps.set(x, y, v);
       }
     }
 
@@ -185,8 +182,8 @@ let saves = {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:true,
-      fps:24,
-      matrixCount:9,
+      fps:30,
+      matrixCount:2,
       ifdead:false,
       /*competitors: [
         color(180,180,180),
@@ -231,5 +228,5 @@ function start() {
 
 
 //canvas.width = canvas.height = matrixSize;
-saveName = "randy";
+saveName = "inversecircle";
 start(saveName)
