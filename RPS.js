@@ -11,7 +11,59 @@ competitors = [
     ];
 */
 
+class RPSCanvasWrapper {
+  constructor(canvas, features) {
+    this.matrixSize = features.matrixSize = 'matrixSize' in features ? features.matrixSize : 32;
+    features.autoloop = false;
 
+    this.targetCanvas = canvas;
+    this.targetContext = canvas.getContext('2d');
+    this.targetContext.imageSmoothingEnabled = false;
+
+    this.intermediateCanvas = new OffscreenCanvas(this.matrixSize, this.matrixSize);
+    this.rps = new RPS(this.intermediateCanvas, features)
+
+    this.gifrecorder = null;
+  }
+
+  startGifRecording() {
+
+  }
+
+  stopGifRecording() {
+
+  }
+
+  saveGifRecording() {
+
+  }
+
+  start() {
+    this.paused = false;
+    this.loop();
+  }
+
+  pause() {
+    this.paused = true;
+  }
+
+  step() {
+    this.paused = true;
+
+    this.loop();
+  }
+
+  loop() {
+    if (!this.paused) requestAnimationFrame(() => this.loop());
+
+    this.rps.step();
+
+    this.targetContext.drawImage(this.intermediateCanvas,
+                                 0, 0,
+                                 this.targetCanvas.width,
+                                 this.targetCanvas.height)
+  }
+}
 
 class RPS {
   constructor(canvas, features) {
@@ -38,11 +90,14 @@ class RPS {
 
     this.ifdead = 'ifdead' in features ? features.ifdead : false;
 
+    this.autoloop = 'autoloop' in features ? features.autoloop : true;
+
     // DERIVED VARIABLES
     this.matrixIndex = 0;
-    let windowSize = canvas.clientHeight;
+    let windowSize = canvas.height;
 
     this.scale = windowSize / this.matrixSize;
+    console.log(this.scale);
 
     //if (this.SMOOTHING == false)
     //  this.matrixCount = 2;
@@ -51,7 +106,7 @@ class RPS {
 
 
     // persistent loop variables
-    this.prevLoopTime = 0;
+    this.prevLoopTime = Date.now();
 
     this.matrixProbMap = new Array(this.matrixCount).fill(1 / this.matrixCount);
     this.matrixValueMap = new Array(this.matrixCount);
@@ -156,14 +211,12 @@ class RPS {
 
   // START
   start() {
-    this.prevLoopTime = Date.now();
     this.paused = false;
 
     this.loop();
   }
 
   step() {
-//    this.prevLoopTime = Date.now();
     this.paused = true;
 
     this.loop();
@@ -184,10 +237,11 @@ class RPS {
 
     if (dt > 1000/this.max_FPS) {
       this.stepdrawing();
-      this.draw(this.SMOOTHING && true);
+//      recorder.addFrame(canvas, {copy: true, delay:1000/this.max_FPS});
       this.prevLoopTime = curTime;
 
-      recorder.addFrame(canvas, {copy: true, delay:1000/this.max_FPS});
+//      recorder.addFrame(canvas, {copy: true, delay:1000/this.max_FPS});
     }
+    this.draw();
   }
 }

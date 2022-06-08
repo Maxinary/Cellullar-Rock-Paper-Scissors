@@ -181,7 +181,7 @@ let saves = {
     if (matrixSize === undefined)
       matrixSize = 128;
 
-    rps = new RPS(canvas, {
+    rps = new RPSCanvasWrapper(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:true,
@@ -201,7 +201,7 @@ let saves = {
 
 let recorder = null;
 let saveName = null;
-let matrixSize = 64;
+let matrixSize = 128;
 
 document.onclick = function() {
   if (!rps.paused)
@@ -209,7 +209,7 @@ document.onclick = function() {
   else
     rps.step();
 
-  recorder.render();
+  //recorder.render();
 }
 
 document.onkeypress = function() {
@@ -218,18 +218,18 @@ document.onkeypress = function() {
 }
 
 function start() {
-  recorder = new GIF({
-    workers: 2,
-    quality: Math.floor(canvas.height / matrixSize)
-  });
+//  recorder = new GIF({
+//    workers: 2,
+//    quality: Math.floor(canvas.height / matrixSize)
+//  });
 
-  recorder.on('finished', function(blob) {
-    window.open(URL.createObjectURL(blob));
-  });
+//  recorder.on('finished', function(blob) {
+//    window.open(URL.createObjectURL(blob));
+//  });
   saves[saveName](matrixSize)
 }
 
 
-canvas.width = canvas.height = matrixSize;
+//canvas.width = canvas.height = matrixSize;
 saveName = "randy";
 start(saveName)
