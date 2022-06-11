@@ -7,7 +7,12 @@ let rps = null;
 let recorder = null;
 let saveName = null;
 let matrixSize = 128;
-
+let preset = "random_three";
+// GUI Object
+let gui = new guify({
+  title: "Rock Paper Scissors",
+  open: true
+});
 
 function start(saveName) {
 //  recorder = new GIF({
@@ -19,7 +24,7 @@ function start(saveName) {
 //    window.open(URL.createObjectURL(blob));
 //  });
   saves['random_three'](matrixSize)
-  rps.start();
+  rps.play();
 }
 
 function getSaveName() {
@@ -27,12 +32,9 @@ function getSaveName() {
   return v.slice(1);
 }
 
+
 // Set up the user interface for controlling relevant RPS parameters
 function configureGUI() {
-  let gui = new guify({
-    title: "Rock Paper Scissors",
-  });
-
   gui.Register(
     [
       // Pause the simulation
@@ -68,14 +70,46 @@ function configureGUI() {
         type: 'range', label: 'FPS',
         min: 1, max: 60, step: 1,
         onChange: (value) => {
-          rps.rps.max_FPS = value;
+          rps.max_FPS = value;
+        }
+      },
+      // Attackers
+      { 
+        type: 'range', label: 'Weapons (?)',
+        min: 3, max: 16, step: 1,
+        onChange: (value) => {
+          // Print
         }
       }
     ]
   );
 }
 
+function colorPickers() {
+  // Remove any existing color pickers
+  gui.Remove();
+
+  // Add the new folder
+  gui.Register({
+    // Color Picker Folder
+    type: 'folder', label: 'Colors', open: true
+  });
+
+  // Add the new individual pickers
+  for (i = 0; i < rps.competitors.length; i++) {
+    gui.Register({
+      type: 'color',
+      label: 'RGB Color',
+      format: 'rgb',
+      object: this,
+      property: 'rps.competitors[i]'
+    });
+  }
+}
+
 // Start the UI
 configureGUI();
 // Start the game
-start(getSaveName());
+start(preset);
+// Load the color pickers
+colorPickers();
