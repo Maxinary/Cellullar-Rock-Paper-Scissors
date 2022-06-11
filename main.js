@@ -43,7 +43,7 @@ function configureGUI() {
         action: () => {
           // Invert the paused variable
           if (rps.paused) {
-            rps.start();
+            rps.run();
           }
           else {
             rps.paused = true;
@@ -66,7 +66,7 @@ function configureGUI() {
         onChange: (value) => {}
       },
       // Frames per second
-      { 
+      {
         type: 'range', label: 'FPS',
         min: 1, max: 60, step: 1,
         onChange: (value) => {
