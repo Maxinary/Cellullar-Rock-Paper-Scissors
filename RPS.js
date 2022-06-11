@@ -1,17 +1,7 @@
-// default
 
-/*
-smoothing = true;
-matrixSize = 128;
-matrixCount = 2;
-competitors = [
-      color(247,  64, 117),
-      color( 21, 197, 100),
-      color( 70,  95, 217)
-    ];
-*/
-
-class RPSCanvasWrapper {
+// This scales the RPS canvas
+// (and will eventually be used as a handler for recording the canvas)
+class RPSCanvasWrapper extends {
   constructor(canvas, features) {
     this.matrixSize = features.matrixSize = 'matrixSize' in features ? features.matrixSize : 32;
     features.autoloop = false;
@@ -21,40 +11,10 @@ class RPSCanvasWrapper {
     this.targetContext.imageSmoothingEnabled = false;
 
     this.intermediateCanvas = new OffscreenCanvas(this.matrixSize, this.matrixSize);
-    this.rps = new RPS(this.intermediateCanvas, features)
+
+    this.super(this.intermediateCanvas, features);
 
     this.gifrecorder = null;
-  }
-
-  startGifRecording() {
-
-  }
-
-  stopGifRecording() {
-
-  }
-
-  saveGifRecording() {
-
-  }
-
-  set(x, y, v) {
-    this.rps.set(x, y, v);
-  }
-
-  start() {
-    this.paused = false;
-    this.loop();
-  }
-
-  pause() {
-    this.paused = true;
-  }
-
-  step() {
-    this.paused = true;
-
-    this.loop();
   }
 
   loop() {
@@ -69,6 +29,7 @@ class RPSCanvasWrapper {
   }
 }
 
+// This handles the logic and drawing for RPS
 class RPS {
   constructor(canvas, features) {
     if (features === undefined)
@@ -106,11 +67,7 @@ class RPS {
 
     this.competitorCount = this.competitors.length;
 
-    //if (this.SMOOTHING == false)
-    //  this.matrixCount = 2;
-
     this.matrix = newMatrix([this.matrixCount, this.matrixSize, this.matrixSize]);
-
 
     // persistent loop variables
     this.prevLoopTime = Date.now();
@@ -152,7 +109,7 @@ class RPS {
     return color(180, 180, 180);
   }
 
-  stepdrawing() {
+  step() {
     let otherIndex = (this.matrixIndex + 1)%this.matrixCount;
     let counts = new Array(this.competitorCount);
     for (let x=0; x<this.matrixSize; x++) {
@@ -220,7 +177,7 @@ class RPS {
   }
 
   // START
-  start() {
+  play() {
     this.paused = false;
 
     this.loop();
@@ -232,26 +189,22 @@ class RPS {
     this.loop();
   }
 
-
   pause() {
     this.paused = true;
   }
-
 
   // LOOP
   loop() {
     if (!this.paused) requestAnimationFrame(()=>this.loop());
 
+    // get time dif from last call
     let curTime = Date.now();
     let dt = curTime - this.prevLoopTime;
 
+    // if time dif is smaller than max fps, don't update logic
     if (dt > 1000/this.max_FPS) {
-//      console.log(1000/dt)
-      this.stepdrawing();
-//      recorder.addFrame(canvas, {copy: true, delay:1000/this.max_FPS});
+      this.step();
       this.prevLoopTime = curTime;
-
-//      recorder.addFrame(canvas, {copy: true, delay:1000/this.max_FPS});
     }
     this.draw();
   }
