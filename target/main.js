@@ -4,7 +4,6 @@ canvas.width = document.body.clientHeight;
 canvas.height = document.body.clientHeight;
 
 let rps = null;
-
 let recorder = null;
 let saveName = null;
 let matrixSize = 128;

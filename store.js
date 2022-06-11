@@ -92,7 +92,6 @@ let saves = {
     for (var x = 0 ; x < matrixSize; x++) {
       for (var y = 0 ; y < matrixSize; y++) {
         let v = 2;
-
         rps.set(x, y, v);
       }
     }

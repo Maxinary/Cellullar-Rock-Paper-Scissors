@@ -1,3 +1,4 @@
+// Find the maximal value of an array
 function argmax(arr) {
   let maxind = 0;
   let maxval = arr[0];

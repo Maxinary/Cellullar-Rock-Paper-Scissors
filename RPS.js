@@ -27,7 +27,7 @@ class RPS {
 
     this.autoloop = 'autoloop' in features ? features.autoloop : true;
 
-    this.minDefeaters = 'minDefeaters' in features ? features.minDefeaters : 3;
+    this.minDefeaters = 'minDefeaters' in features ? features.minDefeaters : 2;
 
     // DERIVED VARIABLES
     this.matrixIndex = 0;
