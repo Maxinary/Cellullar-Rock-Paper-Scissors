@@ -11,7 +11,8 @@ let preset = "random_three";
 // GUI Object
 let gui = new guify({
   title: "Rock Paper Scissors",
-  open: true
+  open: true,
+  panelOverflowBehavior: 'overflow'
 });
 
 function start(saveName) {
@@ -23,7 +24,7 @@ function start(saveName) {
 //  recorder.on('finished', function(blob) {
 //    window.open(URL.createObjectURL(blob));
 //  });
-  saves['random_three'](matrixSize)
+  saves[saveName](matrixSize)
   rps.play();
 }
 
@@ -37,13 +38,26 @@ function getSaveName() {
 function configureGUI() {
   gui.Register(
     [
+      // Preset selector
+      {
+        type: 'select',
+        label: 'Preset',
+        options: Object.keys(saves),
+        onChange: (value) => {
+          console.log(value);
+          // If we're not already paused, do that
+          if (!rps.paused) { rps.paused = true; } 
+          start(value);
+          colorPickers();
+        }
+      },
       // Pause the simulation
       {
         type: 'button', label: 'Play / Pause',
         action: () => {
           // Invert the paused variable
           if (rps.paused) {
-            rps.run();
+            rps.play();
           }
           else {
             rps.paused = true;
@@ -58,17 +72,23 @@ function configureGUI() {
       // Smooth between pixels
       {
         type: 'checkbox', label: 'Smoothing',
-        onChange: (value) => {}
+        onChange: (value) => {
+          rps.SMOOTHING = value;
+        }
       },
       // Initialize randomly
       {
         type: 'checkbox', label: 'Random',
-        onChange: (value) => {}
+        initial: true,
+        onChange: (value) => {
+          rps.INIT_RANDOM = value;
+        }
       },
       // Frames per second
       {
         type: 'range', label: 'FPS',
         min: 1, max: 60, step: 1,
+        initial: 24,
         onChange: (value) => {
           rps.max_FPS = value;
         }
@@ -85,24 +105,32 @@ function configureGUI() {
   );
 }
 
+let removableFolder = null;
 function colorPickers() {
-  // Remove any existing color pickers
-  gui.Remove();
-
+  // If there's an existing set of color pickers
+  if (removableFolder != null) {
+    // Remove them
+    gui.Remove(removableFolder);
+  }
+  
   // Add the new folder
-  gui.Register({
+  removableFolder = gui.Register({
     // Color Picker Folder
     type: 'folder', label: 'Colors', open: true
   });
 
   // Add the new individual pickers
-  for (i = 0; i < rps.competitors.length; i++) {
+  for (let i = 0; i < rps.competitors.length; i++) {
     gui.Register({
       type: 'color',
-      label: 'RGB Color',
-      format: 'rgb',
-      object: this,
-      property: 'rps.competitors[i]'
+      label: 'Color ' + (i+1),
+      format: 'hex',
+      initial: rps.competitors[i],
+      folder: 'Colors',
+      onChange: (value) => {
+        // Update the value of the competitor
+        rps.competitors[i] = value;
+      }
     });
   }
 }
