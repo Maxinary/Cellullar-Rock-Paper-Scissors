@@ -19,7 +19,7 @@ function start(saveName) {
 //    window.open(URL.createObjectURL(blob));
 //  });
   saves['random_three'](matrixSize)
-  rps.start();
+  rps.play();
 }
 
 function getSaveName() {
@@ -41,7 +41,7 @@ function configureGUI() {
         action: () => {
           // Invert the paused variable
           if (rps.paused) {
-            rps.start();
+            rps.run();
           }
           else {
             rps.paused = true;
@@ -64,7 +64,7 @@ function configureGUI() {
         onChange: (value) => {}
       },
       // Frames per second
-      { 
+      {
         type: 'range', label: 'FPS',
         min: 1, max: 60, step: 1,
         onChange: (value) => {
