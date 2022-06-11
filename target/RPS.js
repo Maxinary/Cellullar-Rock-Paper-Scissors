@@ -96,6 +96,8 @@ class RPS {
 
     this.autoloop = 'autoloop' in features ? features.autoloop : true;
 
+    this.minDefeaters = 'minDefeaters' in features ? features.minDefeaters : 3;
+
     // DERIVED VARIABLES
     this.matrixIndex = 0;
     let windowSize = canvas.height;
@@ -181,7 +183,7 @@ class RPS {
             this.matrix[otherIndex][x][y] = maxind;
           else
             this.matrix[otherIndex][x][y] = -1;
-        } else if(counts[defeaterIndex] > 1) { 
+        } else if(counts[defeaterIndex] > this.minDefeaters) {
           this.matrix[otherIndex][x][y] = defeaterIndex;
         } else {
           this.matrix[otherIndex][x][y] = this.matrix[this.matrixIndex][x][y];

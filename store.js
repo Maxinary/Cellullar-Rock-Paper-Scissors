@@ -201,7 +201,8 @@ let saves = {
         color(50,255,255),
         color(255,50,255),
         color(50,50,50)
-      ]
+      ],
+      minDefeaters: 2
     });
   },
   "squarefill":function(matrixSize) {
@@ -220,7 +221,8 @@ let saves = {
         color(180,150,50),
         color(50,230,50),
         color(50,180,180)
-      ]
+      ],
+      minDefeaters: 1
     });
   },
   "random_five":function(matrixSize) {
