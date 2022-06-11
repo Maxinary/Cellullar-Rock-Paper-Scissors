@@ -1,34 +1,4 @@
 
-// This scales the RPS canvas
-// (and will eventually be used as a handler for recording the canvas)
-class RPSCanvasWrapper extends {
-  constructor(canvas, features) {
-    this.matrixSize = features.matrixSize = 'matrixSize' in features ? features.matrixSize : 32;
-    features.autoloop = false;
-
-    this.targetCanvas = canvas;
-    this.targetContext = canvas.getContext('2d');
-    this.targetContext.imageSmoothingEnabled = false;
-
-    this.intermediateCanvas = new OffscreenCanvas(this.matrixSize, this.matrixSize);
-
-    this.super(this.intermediateCanvas, features);
-
-    this.gifrecorder = null;
-  }
-
-  loop() {
-    if (!this.paused) requestAnimationFrame(() => this.loop());
-
-    this.rps.step();
-
-    this.targetContext.drawImage(this.intermediateCanvas,
-                                 0, 0,
-                                 this.targetCanvas.width,
-                                 this.targetCanvas.height)
-  }
-}
-
 // This handles the logic and drawing for RPS
 class RPS {
   constructor(canvas, features) {
@@ -109,7 +79,7 @@ class RPS {
     return color(180, 180, 180);
   }
 
-  step() {
+  stepSimulation() {
     let otherIndex = (this.matrixIndex + 1)%this.matrixCount;
     let counts = new Array(this.competitorCount);
     for (let x=0; x<this.matrixSize; x++) {
@@ -170,7 +140,6 @@ class RPS {
                 localColor = color(0,0,0);
             }
         }
-
         fillGridPoint(this.context, localColor, x, y, this.scale);
       }
     }
@@ -203,9 +172,35 @@ class RPS {
 
     // if time dif is smaller than max fps, don't update logic
     if (dt > 1000/this.max_FPS) {
-      this.step();
+      this.stepSimulation();
       this.prevLoopTime = curTime;
     }
     this.draw();
+  }
+}
+
+// This scales the RPS canvas
+// (and will eventually be used as a handler for recording the canvas)
+class RPSCanvasWrapper extends RPS {
+  constructor(canvas, features) {
+    let matrixSize = features.matrixSize;
+    let intermediateCanvas = new OffscreenCanvas(matrixSize, matrixSize);
+    super(intermediateCanvas, features);
+    this.intermediateCanvas = intermediateCanvas;
+
+    this.matrixSize = matrixSize;
+    features.autoloop = false;
+
+    this.targetCanvas = canvas;
+    this.targetContext = canvas.getContext('2d');
+    this.targetContext.imageSmoothingEnabled = false;
+  }
+
+  loop() {
+    this.targetContext.drawImage(this.intermediateCanvas,
+                                 0, 0,
+                                 this.targetCanvas.width,
+                                 this.targetCanvas.height);
+    super.loop();
   }
 }
