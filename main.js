@@ -15,7 +15,7 @@ let gui = new guify({
   panelOverflowBehavior: 'overflow'
 });
 
-function start(saveName) {
+async function start(saveName) {
 //  recorder = new GIF({
 //    workers: 2,
 //    quality: Math.floor(canvas.height / matrixSize)
@@ -24,7 +24,13 @@ function start(saveName) {
 //  recorder.on('finished', function(blob) {
 //    window.open(URL.createObjectURL(blob));
 //  });
-  saves[saveName](matrixSize)
+  if (saves[saveName]["init_random"] == false &&
+      saves[saveName]['initial_matrix'] == undefined)
+  {
+      saves[saveName]['initial_matrix'] = await readNibbleFile(saveName);
+  }
+  rps = new RPSCanvasWrapper(canvas, saves[saveName]);
+
   rps.play();
 }
 
@@ -46,7 +52,7 @@ function configureGUI() {
         onChange: (value) => {
           console.log(value);
           // If we're not already paused, do that
-          if (!rps.paused) { rps.paused = true; } 
+          if (!rps.paused) { rps.paused = true; }
           start(value);
           colorPickers();
         }
@@ -94,7 +100,7 @@ function configureGUI() {
         }
       },
       // Attackers
-      { 
+      {
         type: 'range', label: 'Weapons (?)',
         min: 3, max: 16, step: 1,
         onChange: (value) => {
@@ -112,7 +118,7 @@ function colorPickers() {
     // Remove them
     gui.Remove(removableFolder);
   }
-  
+
   // Add the new folder
   removableFolder = gui.Register({
     // Color Picker Folder
