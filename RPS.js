@@ -47,7 +47,7 @@ class RPS {
 
     this.context = canvas.getContext("2d");
 
-    // initialize
+    // Start all values as empty
     for (var m=0; m<this.matrixCount; m++) {
       for (var x=0; x<this.matrixSize; x++) {
         for (var y=0; y<this.matrixSize; y++) {
@@ -56,29 +56,29 @@ class RPS {
       }
     }
 
+    // If we were given an initial matrix
     if (initial_matrix !== null)
       this.matrix[0] = initial_matrix;
 
+    // If we want a random initialization
     if (this.INIT_RANDOM) {
-      for (var x=0; x<this.matrixSize; x++) {
-        for (var y=0; y<this.matrixSize; y++) {
-          let v = Math.floor( this.competitorCount * Math.random() );
-          this.matrix[0][x][y] = v;
-        }
-      }
+      this.randomize();
     }
   }
 
+  // Set a given pixel to a given value
   set(x,y,v) {
     this.matrix[this.matrixIndex][x][y] = v;
   }
 
+  // Get the color of a competitor type (ie. rock, paper, scissors...)
   getColor(p) {
     if (p > -1 && p < this.competitors.length)
       return this.competitors[p];
     return color(180, 180, 180);
   }
 
+  // Move the simulation forward a single clock tick
   stepSimulation() {
     let otherIndex = (this.matrixIndex + 1)%this.matrixCount;
     let counts = new Array(this.competitorCount);
@@ -118,6 +118,15 @@ class RPS {
       }
     }
     this.matrixIndex = otherIndex;
+  }
+
+  randomize() {
+    for (var x=0; x<this.matrixSize; x++) {
+      for (var y=0; y<this.matrixSize; y++) {
+        let v = Math.floor( this.competitorCount * Math.random() );
+        this.matrix[0][x][y] = v;
+      }
+    }
   }
 
   draw() {
