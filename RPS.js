@@ -112,7 +112,7 @@ class RPS {
         }
 
         let defeaterIndex = (this.matrix[this.matrixIndex][x][y] + 1)%(this.competitorCount);
-        if (this.matrix[this.matrixIndex][x][y] == -1) {
+        if (this.matrix[this.matrixIndex][x][y] == 15) {
           let maxind = argmax(counts);
           if (counts[maxind] > 0)
             this.matrix[otherIndex][x][y] = maxind;

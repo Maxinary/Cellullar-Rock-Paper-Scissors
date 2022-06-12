@@ -1,8 +1,8 @@
 // could be made more efficient by caching
 // but honestly the efficiency of this function is not important
 function newMatrix(dims) {
-  if (dims.length == 0) {
-    return 0;
+  if (dims.length == 1) {
+    return new Uint8Array(dims[0]);
   }
 
   let o = new Array(dims[0]);
