@@ -2,32 +2,40 @@
 // This handles the logic and drawing for RPS
 class RPS {
   constructor(canvas, features) {
+    const defaultFeatures = {
+      'smoothing': false,
+      'init_random': true,
+      'matrixSize': 32,
+      'matrixCount': 2,
+      'fps': 24,
+      'initial_matrix': null,
+      'competitors': [
+        color(247,  64, 117),
+        color( 21, 197, 100),
+        color( 70,  95, 217)
+      ],
+      'ifdead': false,
+      'minDefeaters': 2
+    };
+    function combineFeatures(f1, f2) {
+      // Obtain the combined list of unique keys in both feature sets
+      let union = Array.from(new Set([...Object.keys(f1), ...Object.keys(f2)]));
+      console.log('union: ' + JSON.stringify(union));
+      // Create a new Object to keep the new values
+      let newFeatures = {};
+      // For each key available
+      union.forEach((key, _) => {
+        newFeatures[key] = key in f1 ? f1[key] : f2[key];
+      });
+      console.log('new features' + JSON.stringify(newFeatures));
+      return newFeatures;
+    }
+
     if (features === undefined)
       features = {};
-    // INPUT FLAGS
-    this.SMOOTHING = 'smoothing' in features ? features.smoothing : false;
-    this.INIT_RANDOM = 'init_random' in features ? features.init_random : true;
 
-    // INPUT CONSTANTS
-    this.matrixSize = 'matrixSize' in features ? features.matrixSize : 32;
-    this.matrixCount = 'matrixCount' in features ? features.matrixCount : 2;
-
-    this.max_FPS = 'fps' in features ? features.fps : 24;
-
-    let initial_matrix = 'initial_matrix' in features ? features.initial_matrix : null;
-
-    this.competitors = 'competitors' in features ? features.competitors :
-        [
-          color(247,  64, 117),
-          color( 21, 197, 100),
-          color( 70,  95, 217)
-        ];
-
-    this.ifdead = 'ifdead' in features ? features.ifdead : false;
-
-    this.autoloop = 'autoloop' in features ? features.autoloop : true;
-
-    this.minDefeaters = 'minDefeaters' in features ? features.minDefeaters : 2;
+    // Save the features
+    this.features = combineFeatures(features, defaultFeatures);
 
     // DERIVED VARIABLES
     this.matrixIndex = 0;
@@ -35,7 +43,7 @@ class RPS {
 
     this.scale = windowSize / this.matrixSize;
 
-    this.competitorCount = this.competitors.length;
+    this.competitorCount = this.features.competitors.length;
 
     this.matrix = newMatrix([this.matrixCount, this.matrixSize, this.matrixSize]);
 
@@ -57,11 +65,11 @@ class RPS {
     }
 
     // If we were given an initial matrix
-    if (initial_matrix !== null)
-      this.matrix[0] = initial_matrix;
+    if (this.features.initial_matrix !== null)
+      this.matrix[0] = this.features.initial_matrix;
 
     // If we want a random initialization
-    if (this.INIT_RANDOM) {
+    if (this.features.init_random) {
       this.randomize();
     }
   }
@@ -196,10 +204,7 @@ class RPSCanvasWrapper extends RPS {
     let intermediateCanvas = new OffscreenCanvas(matrixSize, matrixSize);
     super(intermediateCanvas, features);
     this.intermediateCanvas = intermediateCanvas;
-
     this.matrixSize = matrixSize;
-    features.autoloop = false;
-
     this.targetCanvas = canvas;
     this.targetContext = canvas.getContext('2d');
     this.targetContext.imageSmoothingEnabled = false;

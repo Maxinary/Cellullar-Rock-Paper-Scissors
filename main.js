@@ -131,16 +131,16 @@ function colorPickers() {
   });
 
   // Add the new individual pickers
-  for (let i = 0; i < rps.competitors.length; i++) {
+  for (let i = 0; i < rps.features.competitors.length; i++) {
     gui.Register({
       type: 'color',
       label: 'Color ' + (i+1),
       format: 'hex',
-      initial: rps.competitors[i],
+      initial: rps.features.competitors[i],
       folder: 'Colors',
       onChange: (value) => {
         // Update the value of the competitor
-        rps.competitors[i] = value;
+        rps.features.competitors[i] = value;
       }
     });
   }
