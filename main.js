@@ -7,7 +7,7 @@ let rps = null;
 let recorder = null;
 let saveName = null;
 let matrixSize = 128;
-let preset = "random_three";
+let preset = Object.keys(saves)[0];
 // GUI Object
 let gui = new guify({
   title: "Rock Paper Scissors",
@@ -50,9 +50,10 @@ function configureGUI() {
         label: 'Preset',
         options: Object.keys(saves),
         onChange: (value) => {
-          console.log(value);
-          // If we're not already paused, do that
-          if (!rps.paused) { rps.paused = true; }
+          // Update preset
+          preset = value;
+          // Pause; start; reinit color pickers
+          rps.pause();
           start(value);
           colorPickers();
         }
@@ -73,7 +74,11 @@ function configureGUI() {
       // Reset the simulation
       {
         type: 'button', label: 'Reset',
-        action: () => {}
+        action: () => {
+          if (rps.INIT_RANDOM) {
+            rps.randomize();
+          }
+        }
       },
       // Smooth between pixels
       {
@@ -84,10 +89,10 @@ function configureGUI() {
       },
       // Initialize randomly
       {
-        type: 'checkbox', label: 'Random',
-        initial: true,
+        type: 'checkbox', label: 'Border',
+        initial: false,
         onChange: (value) => {
-          rps.INIT_RANDOM = value;
+          rps.ifdead = value;
         }
       },
       // Frames per second
