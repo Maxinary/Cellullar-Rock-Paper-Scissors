@@ -4,7 +4,7 @@ let saves = {
     matrixSize = 128;
   let triangleSize = 2;
 
-  rps = new RPSCanvasWrapper(canvas, {
+  rps = new RPS(canvas, {
     matrixSize: matrixSize,
     smoothing:false,
     init_random:false,
@@ -24,7 +24,7 @@ let saves = {
   if (matrixSize === undefined)
     matrixSize = 128;
 
-    rps = new RPSCanvasWrapper(canvas, {
+    rps = new RPS(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:false,
@@ -54,7 +54,7 @@ let saves = {
     if (matrixSize === undefined)
       matrixSize = 128;
 
-    rps = new RPSCanvasWrapper(canvas, {
+    rps = new RPS(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:false,
@@ -81,7 +81,7 @@ let saves = {
     if (matrixSize === undefined)
       matrixSize = 128;
 
-    rps = new RPSCanvasWrapper(canvas, {
+    rps = new RPS(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:false,
@@ -143,7 +143,7 @@ let saves = {
       matrixSize = 128;
     let radius = 63;
 
-    rps = new RPSCanvasWrapper(canvas, {
+    rps = new RPS(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:false,
@@ -170,7 +170,7 @@ let saves = {
     if (matrixSize === undefined)
       matrixSize = 128;
 
-    rps = new RPSCanvasWrapper(canvas, {
+    rps = new RPS(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:true,
@@ -188,7 +188,7 @@ let saves = {
     if (matrixSize === undefined)
       matrixSize = 128;
 
-    rps = new RPSCanvasWrapper(canvas, {
+    rps = new RPS(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:true,
@@ -208,7 +208,7 @@ let saves = {
     if (matrixSize === undefined)
       matrixSize = 128;
 
-    rps = new RPSCanvasWrapper(canvas, {
+    rps = new RPS(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:true,
@@ -228,7 +228,7 @@ let saves = {
     if (matrixSize === undefined)
       matrixSize = 128;
 
-    rps = new RPSCanvasWrapper(canvas, {
+    rps = new RPS(canvas, {
       matrixSize: matrixSize,
       smoothing:false,
       init_random:true,
