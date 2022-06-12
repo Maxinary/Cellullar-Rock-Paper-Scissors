@@ -81,7 +81,7 @@ class RPS {
   // Move the simulation forward a single clock tick
   stepSimulation() {
     let otherIndex = (this.matrixIndex + 1)%this.matrixCount;
-    let counts = new Array(this.competitorCount);
+    let counts = new Uint8Array(this.competitorCount);
     for (let x=0; x<this.matrixSize; x++) {
       for (let y=0; y<this.matrixSize; y++) {
         for (let i=0; i<counts.length; i++)
@@ -104,7 +104,7 @@ class RPS {
         }
 
         let defeaterIndex = (this.matrix[this.matrixIndex][x][y] + 1)%(this.competitorCount);
-        if (this.matrix[this.matrixIndex][x][y] == 15) {
+        if (this.matrix[this.matrixIndex][x][y] >= 15) {
           let maxind = argmax(counts);
           if (counts[maxind] > 0)
             this.matrix[otherIndex][x][y] = maxind;
