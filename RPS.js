@@ -15,7 +15,8 @@ class RPS {
         color( 70,  95, 217)
       ],
       'ifdead': false,
-      'minDefeaters': 2
+      'minDefeaters': 2,
+      'jumps': [1]
     };
 
     function combineFeatures(f1, f2) {
@@ -110,17 +111,23 @@ class RPS {
           }
         }
 
-        let defeaterIndex = (this.matrix[this.matrixIndex][x][y] + 1)%(this.competitorCount);
+        let defeaterSet = (this.matrix[this.matrixIndex][x][y] + 1)%(this.competitorCount);
         if (this.matrix[this.matrixIndex][x][y] >= this.competitorCount) {
           let maxind = argmax(counts);
           if (counts[maxind] > 0)
             this.matrix[otherIndex][x][y] = maxind;
           else
             this.matrix[otherIndex][x][y] = -1;
-        } else if(counts[defeaterIndex] > this.features.minDefeaters) {
-          this.matrix[otherIndex][x][y] = defeaterIndex;
         } else {
-          this.matrix[otherIndex][x][y] = this.matrix[this.matrixIndex][x][y];
+          for (let d=0; d<this.features.jumps.length; d++) {
+            let defeaterIndex = (this.matrix[this.matrixIndex][x][y] + this.features.jumps[d])%(this.competitorCount);
+            if(counts[defeaterIndex] > this.features.minDefeaters) {
+              this.matrix[otherIndex][x][y] = defeaterIndex;
+              break;
+            } else {
+              this.matrix[otherIndex][x][y] = this.matrix[this.matrixIndex][x][y];
+            }
+          }
         }
       }
     }
