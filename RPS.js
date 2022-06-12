@@ -120,11 +120,11 @@ class RPS {
     this.matrixIndex = otherIndex;
   }
 
-  draw(intermediate) {
+  draw() {
     for (var x=0; x<this.matrixSize; x++) {
       for (var y=0; y<this.matrixSize; y++) {
         let localColor = "";
-        if (intermediate) {
+        if (this.SMOOTHING) {
           for (let m=0; m<this.matrixCount; m++)
             this.matrixValueMap[m] = this.getColor(this.matrix[m][x][y]);
           localColor = mixColors(this.matrixValueMap, this.matrixProbMap);
