@@ -56,21 +56,15 @@ class RPS {
     this.context = canvas.getContext("2d");
 
     // Start all values as empty
-    for (var m=0; m<this.features.matrixCount; m++) {
-      for (var x=0; x<this.features.matrixSize; x++) {
-        for (var y=0; y<this.features.matrixSize; y++) {
-          this.matrix[m][x][y] = -1;
-        }
-      }
-    }
+    this.emptyMatrix();
 
     // If we were given an initial matrix
     if (this.features.initial_matrix !== null)
-      this.matrix[0] = this.features.initial_matrix;
+      this.matrix[0] = structuredClone(this.features.initial_matrix);
 
     // If we want a random initialization
     if (this.features.init_random) {
-      this.randomize();
+      this.randomizeMatrix();
     }
   }
 
@@ -134,7 +128,17 @@ class RPS {
     this.matrixIndex = otherIndex;
   }
 
-  randomize() {
+  emptyMatrix() {
+    for (var m=0; m<this.features.matrixCount; m++) {
+      for (var x=0; x<this.features.matrixSize; x++) {
+        for (var y=0; y<this.features.matrixSize; y++) {
+          this.matrix[m][x][y] = -1;
+        }
+      }
+    }
+  }
+
+  randomizeMatrix() {
     for (var x=0; x<this.features.matrixSize; x++) {
       for (var y=0; y<this.features.matrixSize; y++) {
         let v = Math.floor( this.competitorCount * Math.random() );

@@ -63,21 +63,28 @@ function configureGUI() {
         type: 'button', label: 'Play / Pause',
         action: () => {
           // Invert the paused variable
-          if (rps.paused) {
-            rps.play();
-          }
-          else {
-            rps.paused = true;
-          }
+          if (rps.paused) { rps.play(); }
+          else { rps.pause(); }
         }
       },
       // Reset the simulation
       {
         type: 'button', label: 'Reset',
         action: () => {
-          if (rps.INIT_RANDOM) {
-            rps.randomize();
+          // Pause
+          rps.pause();
+          rps.matrixIndex = 0;
+
+          // If the matrix is initialized randomly
+          if (rps.features.init_random) {
+            rps.randomizeMatrix();
           }
+          // If there is an initial state
+          else {
+            rps.matrix[0] = structuredClone(rps.features.initial_matrix);
+          }
+          // Resume
+          rps.play();
         }
       },
       // Smooth between pixels
@@ -146,7 +153,5 @@ function colorPickers() {
   }
 }
 
-// Start the UI
-configureGUI();
 // Start the game then load the colors
-start(preset).then(colorPickers);
+start(preset).then(configureGUI).then(colorPickers);
