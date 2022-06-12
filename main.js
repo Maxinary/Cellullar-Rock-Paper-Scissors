@@ -148,7 +148,5 @@ function colorPickers() {
 
 // Start the UI
 configureGUI();
-// Start the game
-start(preset);
-// Load the color pickers
-colorPickers();
+// Start the game then load the colors
+start(preset).then(colorPickers);
