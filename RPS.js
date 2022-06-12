@@ -17,7 +17,7 @@ class RPS {
       'ifdead': false,
       'minDefeaters': 2
     };
-    
+
     function combineFeatures(f1, f2) {
       // Obtain the combined list of unique keys in both feature sets
       let union = Array.from(new Set([...Object.keys(f1), ...Object.keys(f2)]));
@@ -40,24 +40,24 @@ class RPS {
     this.matrixIndex = 0;
     let windowSize = canvas.height;
 
-    this.scale = windowSize / this.matrixSize;
+    this.scale = windowSize / this.features.matrixSize;
 
     this.competitorCount = this.features.competitors.length;
 
-    this.matrix = newMatrix([this.matrixCount, this.matrixSize, this.matrixSize]);
+    this.matrix = newMatrix([this.features.matrixCount, this.features.matrixSize, this.features.matrixSize]);
 
     // persistent loop variables
     this.prevLoopTime = Date.now();
 
-    this.matrixProbMap = new Array(this.matrixCount).fill(1 / this.matrixCount);
-    this.matrixValueMap = new Array(this.matrixCount);
+    this.matrixProbMap = new Array(this.features.matrixCount).fill(1 / this.features.matrixCount);
+    this.matrixValueMap = new Array(this.features.matrixCount);
 
     this.context = canvas.getContext("2d");
 
     // Start all values as empty
-    for (var m=0; m<this.matrixCount; m++) {
-      for (var x=0; x<this.matrixSize; x++) {
-        for (var y=0; y<this.matrixSize; y++) {
+    for (var m=0; m<this.features.matrixCount; m++) {
+      for (var x=0; x<this.features.matrixSize; x++) {
+        for (var y=0; y<this.features.matrixSize; y++) {
           this.matrix[m][x][y] = -1;
         }
       }
@@ -87,10 +87,10 @@ class RPS {
 
   // Move the simulation forward a single clock tick
   stepSimulation() {
-    let otherIndex = (this.matrixIndex + 1)%this.matrixCount;
-    let counts = new Uint8Array(this.competitorCount);
-    for (let x=0; x<this.matrixSize; x++) {
-      for (let y=0; y<this.matrixSize; y++) {
+    let otherIndex = (this.matrixIndex + 1)%this.features.matrixCount;
+    let counts = new Array(this.competitorCount);
+    for (let x=0; x<this.features.matrixSize; x++) {
+      for (let y=0; y<this.features.matrixSize; y++) {
         for (let i=0; i<counts.length; i++)
           counts[i] = 0;
 
@@ -101,7 +101,7 @@ class RPS {
               let yf = y+yd;
 
 
-              if (xf > -1 && yf > -1 && xf < this.matrixSize && yf < this.matrixSize) {
+              if (xf > -1 && yf > -1 && xf < this.features.matrixSize && yf < this.features.matrixSize) {
                 let v = this.matrix[this.matrixIndex][xf][yf];
                 if (v != -1)
                   counts[v]++;
@@ -128,8 +128,8 @@ class RPS {
   }
 
   randomize() {
-    for (var x=0; x<this.matrixSize; x++) {
-      for (var y=0; y<this.matrixSize; y++) {
+    for (var x=0; x<this.features.matrixSize; x++) {
+      for (var y=0; y<this.features.matrixSize; y++) {
         let v = Math.floor( this.competitorCount * Math.random() );
         this.matrix[0][x][y] = v;
       }
@@ -137,11 +137,11 @@ class RPS {
   }
 
   draw() {
-    for (var x=0; x<this.matrixSize; x++) {
-      for (var y=0; y<this.matrixSize; y++) {
+    for (var x=0; x<this.features.matrixSize; x++) {
+      for (var y=0; y<this.features.matrixSize; y++) {
         let localColor = "";
         if (this.SMOOTHING) {
-          for (let m=0; m<this.matrixCount; m++)
+          for (let m=0; m<this.features.matrixCount; m++)
             this.matrixValueMap[m] = this.getColor(this.matrix[m][x][y]);
           localColor = mixColors(this.matrixValueMap, this.matrixProbMap);
         } else {
@@ -150,9 +150,9 @@ class RPS {
 
         if (this.ifdead) {
           localColor = this.getColor(this.matrix[this.matrixIndex][x][y]);
-          for (var m=0; m<this.matrixCount-1; m++) {
+          for (var m=0; m<this.features.matrixCount-1; m++) {
             if (this.matrix[this.matrixIndex][x][y] !=
-                this.matrix[(this.matrixIndex+m+1)%this.matrixCount][x][y])
+                this.matrix[(this.matrixIndex+m+1)%this.features.matrixCount][x][y])
                 localColor = color(0,0,0);
             }
         }
