@@ -103,7 +103,7 @@ class RPS {
 
               if (xf > -1 && yf > -1 && xf < this.features.matrixSize && yf < this.features.matrixSize) {
                 let v = this.matrix[this.matrixIndex][xf][yf];
-                if (v != -1)
+                if (v < this.competitorCount)
                   counts[v]++;
               }
             }
@@ -111,7 +111,7 @@ class RPS {
         }
 
         let defeaterIndex = (this.matrix[this.matrixIndex][x][y] + 1)%(this.competitorCount);
-        if (this.matrix[this.matrixIndex][x][y] >= 15) {
+        if (this.matrix[this.matrixIndex][x][y] >= this.competitorCount) {
           let maxind = argmax(counts);
           if (counts[maxind] > 0)
             this.matrix[otherIndex][x][y] = maxind;
