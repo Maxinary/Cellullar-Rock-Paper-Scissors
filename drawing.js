@@ -20,16 +20,6 @@ function fillGridPoint(ctx, color, x, y, gridElementSize) {
   ctx.fillRect(x*gridElementSize, y*gridElementSize, gridElementSize, gridElementSize);
 }
 
-function hex(number) {
-  number = Math.floor(number);
-
-  return number.toString(16).padStart(2, '0');
-}
-
-function dehex(hex) {
-  return parseInt(hex, 16);
-}
-
 function color(r, g, b) {
   return `#${hex(r)}${hex(g)}${hex(b)}`
 }
