@@ -1,36 +1,35 @@
+const defaultFeatures = {
+  'smoothing': false,
+  'init_random': true,
+  'matrixSize': 32,
+  'matrixCount': 2,
+  'fps': 24,
+  'initial_matrix': null,
+  'competitors': [
+    color(247,  64, 117),
+    color( 21, 197, 100),
+    color( 70,  95, 217)
+  ],
+  'ifdead': false,
+  'minDefeaters': 2,
+  'jumps': [1]
+};
+
+function combineFeatures(f1, f2) {
+  // Obtain the combined list of unique keys in both feature sets
+  let union = Array.from(new Set([...Object.keys(f1), ...Object.keys(f2)]));
+  // Create a new Object to keep the new values
+  let newFeatures = {};
+  // For each key available
+  union.forEach((key, _) => {
+    newFeatures[key] = key in f1 ? f1[key] : f2[key];
+  });
+  return newFeatures;
+}
 
 // This handles the logic and drawing for RPS
 class RPS {
   constructor(canvas, features) {
-    const defaultFeatures = {
-      'smoothing': false,
-      'init_random': true,
-      'matrixSize': 32,
-      'matrixCount': 2,
-      'fps': 24,
-      'initial_matrix': null,
-      'competitors': [
-        color(247,  64, 117),
-        color( 21, 197, 100),
-        color( 70,  95, 217)
-      ],
-      'ifdead': false,
-      'minDefeaters': 2,
-      'jumps': [1]
-    };
-
-    function combineFeatures(f1, f2) {
-      // Obtain the combined list of unique keys in both feature sets
-      let union = Array.from(new Set([...Object.keys(f1), ...Object.keys(f2)]));
-      // Create a new Object to keep the new values
-      let newFeatures = {};
-      // For each key available
-      union.forEach((key, _) => {
-        newFeatures[key] = key in f1 ? f1[key] : f2[key];
-      });
-      return newFeatures;
-    }
-
     if (features === undefined)
       features = {};
 

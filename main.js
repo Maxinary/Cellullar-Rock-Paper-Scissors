@@ -39,11 +39,17 @@ function getSaveName() {
   return v.slice(1);
 }
 
+let guiFeatures = structuredClone(defaultFeatures);
+guiFeatures.locked = true;
 
 // Set up the user interface for controlling relevant RPS parameters
 function configureGUI() {
   gui.Register(
     [
+      {
+        type: 'title',
+        label: 'Simulation'
+      },
       // Preset selector
       {
         type: 'select',
@@ -56,6 +62,13 @@ function configureGUI() {
           rps.pause();
           start(value);
           colorPickers();
+          // Load the existing non-competitor properties if not locked
+          if (guiFeatures.locked) {
+            // Overwrite
+            rps.features.smoothing = guiFeatures.smoothing;
+            rps.features.fps = guiFeatures.fps;
+            rps.features.ifdead = guiFeatures.ifdead;
+          }
         }
       },
       // Pause the simulation
@@ -87,9 +100,26 @@ function configureGUI() {
           rps.play();
         }
       },
+      // Step the simulation
+      {
+        type: 'button', label: 'Step',
+        action: () => { rps.step(); }
+      },
+      {
+        type: 'title',
+        label: 'Rendering'
+      },
+      // Lock the relevant parameters
+      {
+        type: 'checkbox', label: 'Locked',
+        object: guiFeatures,
+        property: 'locked'
+      },
       // Smooth between pixels
       {
         type: 'checkbox', label: 'Smoothing',
+        object: guiFeatures,
+        property: 'smoothing',
         onChange: (value) => {
           rps.features.smoothing = value;
         }
@@ -97,7 +127,8 @@ function configureGUI() {
       // Initialize randomly
       {
         type: 'checkbox', label: 'Border',
-        initial: false,
+        object: guiFeatures,
+        property: 'ifdead',
         onChange: (value) => {
           rps.features.ifdead = value;
         }
@@ -107,6 +138,8 @@ function configureGUI() {
         type: 'range', label: 'FPS',
         min: 1, max: 60, step: 1,
         initial: 24,
+        object: guiFeatures,
+        property: 'fps',
         onChange: (value) => {
           rps.features.fps = value;
         }
