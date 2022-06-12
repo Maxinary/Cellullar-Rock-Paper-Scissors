@@ -17,17 +17,16 @@ class RPS {
       'ifdead': false,
       'minDefeaters': 2
     };
+    
     function combineFeatures(f1, f2) {
       // Obtain the combined list of unique keys in both feature sets
       let union = Array.from(new Set([...Object.keys(f1), ...Object.keys(f2)]));
-      console.log('union: ' + JSON.stringify(union));
       // Create a new Object to keep the new values
       let newFeatures = {};
       // For each key available
       union.forEach((key, _) => {
         newFeatures[key] = key in f1 ? f1[key] : f2[key];
       });
-      console.log('new features' + JSON.stringify(newFeatures));
       return newFeatures;
     }
 
@@ -81,8 +80,8 @@ class RPS {
 
   // Get the color of a competitor type (ie. rock, paper, scissors...)
   getColor(p) {
-    if (p > -1 && p < this.competitors.length)
-      return this.competitors[p];
+    if (p > -1 && p < this.features.competitors.length)
+      return this.features.competitors[p];
     return color(180, 180, 180);
   }
 
