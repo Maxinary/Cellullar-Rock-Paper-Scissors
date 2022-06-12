@@ -117,7 +117,7 @@ class RPS {
             this.matrix[otherIndex][x][y] = maxind;
           else
             this.matrix[otherIndex][x][y] = -1;
-        } else if(counts[defeaterIndex] > this.minDefeaters) {
+        } else if(counts[defeaterIndex] > this.features.minDefeaters) {
           this.matrix[otherIndex][x][y] = defeaterIndex;
         } else {
           this.matrix[otherIndex][x][y] = this.matrix[this.matrixIndex][x][y];
@@ -140,7 +140,7 @@ class RPS {
     for (var x=0; x<this.features.matrixSize; x++) {
       for (var y=0; y<this.features.matrixSize; y++) {
         let localColor = "";
-        if (this.SMOOTHING) {
+        if (this.features.smoothing) {
           for (let m=0; m<this.features.matrixCount; m++)
             this.matrixValueMap[m] = this.getColor(this.matrix[m][x][y]);
           localColor = mixColors(this.matrixValueMap, this.matrixProbMap);
@@ -148,7 +148,7 @@ class RPS {
           localColor = this.getColor(this.matrix[this.matrixIndex][x][y]);
         }
 
-        if (this.ifdead) {
+        if (this.features.ifdead) {
           localColor = this.getColor(this.matrix[this.matrixIndex][x][y]);
           for (var m=0; m<this.features.matrixCount-1; m++) {
             if (this.matrix[this.matrixIndex][x][y] !=
@@ -187,7 +187,7 @@ class RPS {
     let dt = curTime - this.prevLoopTime;
 
     // if time dif is smaller than max fps, don't update logic
-    if (dt > 1000/this.max_FPS) {
+    if (dt > 1000/this.features.fps) {
       this.stepSimulation();
       this.prevLoopTime = curTime;
     }

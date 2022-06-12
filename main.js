@@ -84,7 +84,7 @@ function configureGUI() {
       {
         type: 'checkbox', label: 'Smoothing',
         onChange: (value) => {
-          rps.SMOOTHING = value;
+          rps.features.smoothing = value;
         }
       },
       // Initialize randomly
@@ -92,7 +92,7 @@ function configureGUI() {
         type: 'checkbox', label: 'Border',
         initial: false,
         onChange: (value) => {
-          rps.ifdead = value;
+          rps.features.ifdead = value;
         }
       },
       // Frames per second
@@ -101,7 +101,7 @@ function configureGUI() {
         min: 1, max: 60, step: 1,
         initial: 24,
         onChange: (value) => {
-          rps.max_FPS = value;
+          rps.features.fps = value;
         }
       },
       // Attackers
