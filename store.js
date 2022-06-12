@@ -75,6 +75,25 @@ let saves = {
         color(50,50,230)
       ],
       jumps: [1,2]
+    },
+    "random_seven": {
+      matrixSize: 128,
+      smoothing:false,
+      init_random:true,
+      fps:24,
+      matrixCount:2,
+      ifdead:false,
+      competitors: [
+        color(230,50,50),
+        color(180,180,50),
+        color(50,230,50),
+        color(50,180,180),
+        color(50,50,230),
+        '#d100ff',
+        color(255,255,230)
+      ],
+      minDefeaters: 1,
+      jumps: [2, 3]
     }
 };
 
